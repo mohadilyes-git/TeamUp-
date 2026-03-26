@@ -70,7 +70,7 @@ struct RegisterView: View {
                         .background(Color.white)
                         .cornerRadius(12)
                     
-                    // Confirm password field  checks passwords match
+                    // Confirm password field checks passwords match
                     SecureField("Confirm Password", text: $confirmPassword)
                         .padding()
                         .background(Color.white)
