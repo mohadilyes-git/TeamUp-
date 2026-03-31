@@ -13,76 +13,93 @@ struct LoginView: View {
     
     @State private var email = ""
     @State private var password = ""
-    
+    @StateObject private var viewModel = AuthViewModel()
     @State private var goToRegister = false
     
     var body: some View {
         
         // NavigationStack allows navigation between screens
-        
-        NavigationStack {
+        if viewModel.isLoggedIn {
+            HomeView()
+        } else {
             
-            // ZStack places background colour behind all content
             
-            ZStack {
-                Color(red: 0.949, green: 0.949, blue: 0.980)
-                    .ignoresSafeArea()
-                VStack(spacing: 24) {
-                    Spacer()
-                    // Logo
-                    Image("TeamUpmainlogo")
-                        .resizable()
-                        .aspectRatio(contentMode: .fit)
-                        .frame(width: 80, height: 80)
-                    Text("Welcome Back")
-                        .font(.system(size: 28, weight: .bold))
-                        .foregroundColor(Color(red: 0.498, green: 0.467, blue: 0.867))
-                    Text("Log in to find your roommate")
-                        .font(.system(size: 16))
-                        .foregroundColor(.gray)
-                    
-                    // Input fields
-                    VStack(spacing: 16) {
-                        
-                        // Email input field
-                        TextField("Email", text: $email)
-                            .padding()
-                            .background(Color.white)
-                            .cornerRadius(12)
-                            .autocapitalization(.none)
-                        
-                        // Password input field
-                        SecureField("Password", text: $password)
-                            .padding()
-                            .background(Color.white)
-                            .cornerRadius(12)
-                    }
-                    .padding(.horizontal)
-                    
-                        // Login Button
-                    Button(action: {
-                        // Firebase login will go here
-                    }) {
-                        Text("Log In")
-                            .font(.system(size: 18, weight: .bold))
-                            .foregroundColor(.white)
-                            .frame(maxWidth: .infinity)
-                            .padding()
-                            .background(Color(red: 0.498, green: 0.467, blue: 0.867))
-                            .cornerRadius(12)
-                    }
-                    .padding(.horizontal)
-                    // Register link
-                    NavigationLink(destination: RegisterView()) {
-                        Text("Don't have an account? ")
-                            .foregroundColor(.gray)
-                        Text("Sign Up")
+            NavigationStack {
+                
+                // ZStack places background colour behind all content
+                
+                ZStack {
+                    Color(red: 0.949, green: 0.949, blue: 0.980)
+                        .ignoresSafeArea()
+                    VStack(spacing: 24) {
+                        Spacer()
+                        // Logo
+                        Image("TeamUpmainlogo")
+                            .resizable()
+                            .aspectRatio(contentMode: .fit)
+                            .frame(width: 80, height: 80)
+                        Text("Welcome Back")
+                            .font(.teamTitle)
                             .foregroundColor(Color(red: 0.498, green: 0.467, blue: 0.867))
-                            .bold()
+                        Text("Log in to find your roommate")
+                            .font(.teamHeading)
+                            .foregroundColor(.gray)
+                        
+                        // Input fields
+                        VStack(spacing: 16) {
+                            
+                            // Email input field
+                            TextField("Email", text: $email)
+                                .padding()
+                                .background(Color.white)
+                                .cornerRadius(12)
+                                .autocapitalization(.none)
+                            
+                            // Password input field
+                            SecureField("Password", text: $password)
+                                .padding()
+                                .background(Color.white)
+                                .cornerRadius(12)
+                        }
+                        .padding(.horizontal)
+                        
+                        if !viewModel.errorMessage.isEmpty {
+                            Text(viewModel.errorMessage)
+                                .foregroundColor(.red)
+                                .font(.system(size: 14))
+                                .padding(.horizontal)
+                        }
+                        // Login Button
+                        Button(action: {
+                            viewModel.login(email: email, password: password)
+                        }) {
+                            if viewModel.isLoading {
+                                ProgressView()
+                                    .tint(.white)
+                            } else {
+                                Text("Log In")
+                                    .font(.teamButton)
+                                    .foregroundColor(.white)
+                                 } }
+                        
+                                .frame(maxWidth: .infinity)
+                                .padding()
+                                .background(Color(red: 0.498, green: 0.467, blue: 0.867))
+                                .cornerRadius(12)
+                        
+                        .padding(.horizontal)
+                        // Register link
+                        NavigationLink(destination: RegisterView()) {
+                            Text("Don't have an account? ")
+                                .foregroundColor(.gray)
+                            Text("Sign Up")
+                                .foregroundColor(Color(red: 0.498, green: 0.467, blue: 0.867))
+                                .bold()
+                        }
+                        Spacer()
+                        }
                     }
-                    Spacer()
-                }
-            }
-        }
+                }// closes NavigationStack
+            }// closes else
     }
 }
