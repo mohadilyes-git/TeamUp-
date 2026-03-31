@@ -6,6 +6,7 @@
 //
 
 
+
 import SwiftUI
 import Combine
 
@@ -29,7 +30,7 @@ struct RegisterView: View {
     
     var body: some View {
         
-        // If registered successfully go to HomeView
+        // If registered successfully, go to HomeView
         if viewModel.isLoggedIn {
             HomeView()
         } else {
@@ -75,14 +76,14 @@ struct RegisterView: View {
                         // Full name input field
                         TextField("Full Name", text: $name)
                             .padding()
-                            .background(Color.white.opacity(0.8))
+                            .background(Color.white.opacity(0.9))
                             .cornerRadius(12)
                             .foregroundColor(.black)
                         
                         // Email input field
                         TextField("Email", text: $email)
                             .padding()
-                            .background(Color.white.opacity(0.8))
+                            .background(Color.white.opacity(0.9))
                             .cornerRadius(12)
                             .foregroundColor(.black)
                             .autocapitalization(.none)
@@ -90,14 +91,14 @@ struct RegisterView: View {
                         // Password input field
                         SecureField("Password", text: $password)
                             .padding()
-                            .background(Color.white.opacity(0.8))
+                            .background(Color.white.opacity(0.9))
                             .cornerRadius(12)
                             .foregroundColor(.black)
                         
                         // Confirm password field checks passwords match
                         SecureField("Confirm Password", text: $confirmPassword)
                             .padding()
-                            .background(Color.white.opacity(0.8))
+                            .background(Color.white.opacity(0.9))
                             .cornerRadius(12)
                             .foregroundColor(.black)
                     }

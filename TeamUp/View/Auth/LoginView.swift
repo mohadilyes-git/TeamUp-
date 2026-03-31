@@ -6,12 +6,6 @@
 //
 
 
-//
-//  LoginView.swift
-//  TeamUp
-//
-//  Created by Ilyes Mo on 20/03/2026.
-//
 
 import SwiftUI
 import Combine
@@ -83,7 +77,7 @@ struct LoginView: View {
                             // Email input field
                             TextField("Email", text: $email)
                                 .padding()
-                                .background(Color.white.opacity(0.8))
+                                .background(Color.white.opacity(0.9))
                                 .cornerRadius(12)
                                 .foregroundColor(.black)
                                 .autocapitalization(.none)
@@ -91,7 +85,7 @@ struct LoginView: View {
                             // Password input field
                             SecureField("Password", text: $password)
                                 .padding()
-                                .background(Color.white.opacity(0.8))
+                                .background(Color.white.opacity(0.9))
                                 .cornerRadius(12)
                                 .foregroundColor(.black)
                         }
