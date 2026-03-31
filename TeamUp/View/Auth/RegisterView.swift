@@ -5,9 +5,9 @@
 //  Created by Ilyes Mo on 19/03/2026.
 //
 
-import SwiftUI
 
 import SwiftUI
+import Combine
 
 struct RegisterView: View {
     
@@ -18,16 +18,34 @@ struct RegisterView: View {
     @State private var confirmPassword = ""
     @StateObject private var viewModel = AuthViewModel()
     
+    // Tracks which background image is currently showing
+    @State private var currentSlide = 0
+    
+    // Array of background images stored in Assets
+    let slides = ["MainScreenPic1", "MainScreenPic2", "MainScreenPic3", "MainScreenPic4"]
+    
+    // Timer that fires every 3 seconds to change the background image
+    let timer = Timer.publish(every: 3, on: .main, in: .common).autoconnect()
+    
     var body: some View {
+        
+        // If registered successfully go to HomeView
         if viewModel.isLoggedIn {
             HomeView()
         } else {
             
-            // ZStack places background colour behind all content
+            
             ZStack {
                 
-                // Light background colour
-                Color(red: 0.949, green: 0.949, blue: 0.980)
+                // Background slideshow image
+                Image(slides[currentSlide])
+                    .resizable()
+                    .scaledToFill()
+                    .ignoresSafeArea()
+                    .animation(.easeInOut(duration: 1), value: currentSlide)
+                
+                // Dark overlay so text is readable over the photos
+                Color.black.opacity(0.5)
                     .ignoresSafeArea()
                 
                 // Main vertical layout
@@ -44,12 +62,12 @@ struct RegisterView: View {
                     // Main heading
                     Text("Create Account")
                         .font(.system(size: 28, weight: .bold))
-                        .foregroundColor(Color(red: 0.498, green: 0.467, blue: 0.867))
+                        .foregroundColor(.white)
                     
                     // Subtitle
                     Text("Join Teamup today")
                         .font(.system(size: 16))
-                        .foregroundColor(.gray)
+                        .foregroundColor(.white.opacity(0.8))
                     
                     // Input fields
                     VStack(spacing: 16) {
@@ -57,37 +75,43 @@ struct RegisterView: View {
                         // Full name input field
                         TextField("Full Name", text: $name)
                             .padding()
-                            .background(Color.white)
+                            .background(Color.white.opacity(0.8))
                             .cornerRadius(12)
+                            .foregroundColor(.black)
                         
                         // Email input field
                         TextField("Email", text: $email)
                             .padding()
-                            .background(Color.white)
+                            .background(Color.white.opacity(0.8))
                             .cornerRadius(12)
+                            .foregroundColor(.black)
                             .autocapitalization(.none)
                         
                         // Password input field
-                        
                         SecureField("Password", text: $password)
                             .padding()
-                            .background(Color.white)
+                            .background(Color.white.opacity(0.8))
                             .cornerRadius(12)
+                            .foregroundColor(.black)
                         
                         // Confirm password field checks passwords match
                         SecureField("Confirm Password", text: $confirmPassword)
                             .padding()
-                            .background(Color.white)
+                            .background(Color.white.opacity(0.8))
                             .cornerRadius(12)
+                            .foregroundColor(.black)
                     }
                     .padding(.horizontal)
+                    
+                    // Shows error message if registration fails
                     if !viewModel.errorMessage.isEmpty {
                         Text(viewModel.errorMessage)
                             .foregroundColor(.red)
                             .font(.system(size: 14))
                             .padding(.horizontal)
                     }
-                    // Register button Firebase logic will be added here
+                    
+                    // Register button - validates passwords then calls Firebase
                     Button(action: {
                         guard password == confirmPassword else {
                             viewModel.errorMessage = "Passwords do not match"
@@ -102,29 +126,30 @@ struct RegisterView: View {
                             Text("Sign Up")
                                 .font(.system(size: 18, weight: .bold))
                                 .foregroundColor(.white)
-                            }
                         }
-                            .frame(maxWidth: .infinity)
-                            .padding()
-                            .background(Color(red: 0.498, green: 0.467, blue: 0.867))
-                            .cornerRadius(12)
-                        
-                            .padding(.horizontal)
-                        
-                        // Link back to login screen
-                        NavigationLink(destination: LoginView()) {
-                            Text("Already have an account? ")
-                                .foregroundColor(.gray)
-                            Text("Log In")
-                                .foregroundColor(
-                                    Color(red: 0.498, green: 0.467, blue: 0.867))
-                                .bold()
-                        }
-                        
-                        Spacer()
                     }
+                    .frame(maxWidth: .infinity)
+                    .padding()
+                    .background(Color(red: 0.498, green: 0.467, blue: 0.867))
+                    .cornerRadius(12)
+                    .padding(.horizontal)
+                    
+                    // Link back to login screen
+                    NavigationLink(destination: LoginView()) {
+                        Text("Already have an account? ")
+                            .foregroundColor(.white.opacity(0.8))
+                        Text("Log In")
+                            .foregroundColor(Color(red: 0.498, green: 0.467, blue: 0.867))
+                            .bold()
+                    }
+                    
+                    Spacer()
                 }
-            }// closes Zstack
-        } // closes else
-    }// closes body
-
+            }
+            // Advances the slide every time the timer fires
+            .onReceive(timer) { _ in
+                currentSlide = (currentSlide + 1) % slides.count
+            }
+        }
+    }
+}
