@@ -6,7 +6,6 @@
 //
 
 
-
 import SwiftUI
 import Combine
 
@@ -35,7 +34,7 @@ struct RegisterView: View {
             HomeView()
         } else {
             
-            
+           
             ZStack {
                 
                 // Background slideshow image
