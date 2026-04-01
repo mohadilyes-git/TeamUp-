@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		B110D04D2F71D227000754E0 /* FirebaseAuth in Frameworks */ = {isa = PBXBuildFile; productRef = B110D04C2F71D227000754E0 /* FirebaseAuth */; };
 		B110D04F2F71D227000754E0 /* FirebaseFirestore in Frameworks */ = {isa = PBXBuildFile; productRef = B110D04E2F71D227000754E0 /* FirebaseFirestore */; };
+		B1CDB9452F7DC67E00C7AB18 /* FirebaseStorage in Frameworks */ = {isa = PBXBuildFile; productRef = B1CDB9442F7DC67E00C7AB18 /* FirebaseStorage */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -43,6 +44,7 @@
 			files = (
 				B110D04D2F71D227000754E0 /* FirebaseAuth in Frameworks */,
 				B110D04F2F71D227000754E0 /* FirebaseFirestore in Frameworks */,
+				B1CDB9452F7DC67E00C7AB18 /* FirebaseStorage in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -53,6 +55,7 @@
 			isa = PBXGroup;
 			children = (
 				B110D00C2F6CBF57000754E0 /* TeamUp */,
+				B1CDB9432F7DC67E00C7AB18 /* Frameworks */,
 				B110D00B2F6CBF57000754E0 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -63,6 +66,13 @@
 				B110D00A2F6CBF57000754E0 /* TeamUp.app */,
 			);
 			name = Products;
+			sourceTree = "<group>";
+		};
+		B1CDB9432F7DC67E00C7AB18 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -87,6 +97,7 @@
 			packageProductDependencies = (
 				B110D04C2F71D227000754E0 /* FirebaseAuth */,
 				B110D04E2F71D227000754E0 /* FirebaseFirestore */,
+				B1CDB9442F7DC67E00C7AB18 /* FirebaseStorage */,
 			);
 			productName = TeamUp;
 			productReference = B110D00A2F6CBF57000754E0 /* TeamUp.app */;
@@ -276,9 +287,11 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 34L534GB34;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = TeamUp/Info.plist;
+				INFOPLIST_KEY_NSCameraUsageDescription = "TeamUp needs camera access to take your profile photo";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -308,9 +321,11 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 34L534GB34;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = TeamUp/Info.plist;
+				INFOPLIST_KEY_NSCameraUsageDescription = "TeamUp needs camera access to take your profile photo";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -377,6 +392,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = B110D04B2F71D227000754E0 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
 			productName = FirebaseFirestore;
+		};
+		B1CDB9442F7DC67E00C7AB18 /* FirebaseStorage */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = B110D04B2F71D227000754E0 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseStorage;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

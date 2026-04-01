@@ -23,7 +23,7 @@ struct UserProfile: Codable {
     // Housing preferences
     var budget: Int = 500
     var preferredArea: String = ""
-    var moveInDate: String = ""
+    var moveInDate: Date = Date()
     var preferredGender: String = ""
     
     // Lifestyle

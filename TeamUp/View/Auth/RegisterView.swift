@@ -31,7 +31,9 @@ struct RegisterView: View {
         
         // If registered successfully, go to HomeView
         if viewModel.isLoggedIn {
-            HomeView()
+            NavigationStack {
+                    ProfileSetupView()
+                }
         } else {
             
            
@@ -146,9 +148,12 @@ struct RegisterView: View {
                     Spacer()
                 }
             }
-            // Advances the slide every time the timer fires
-            .onReceive(timer) { _ in
-                currentSlide = (currentSlide + 1) % slides.count
+            .onAppear {
+                Timer.scheduledTimer(withTimeInterval: 3.0, repeats: true) { _ in
+                    withAnimation(.easeInOut(duration: 1)) {
+                        currentSlide = (currentSlide + 1) % slides.count
+                    }
+                }
             }
         }
     }
