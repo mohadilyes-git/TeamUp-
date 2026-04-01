@@ -118,11 +118,31 @@ struct Step1PersonalView: View {
     // Photo picker state
     @State private var selectedPhoto: PhotosPickerItem? = nil
     @State private var profileImage: UIImage? = nil
+    @State private var isLoadingImage = false
     @State private var showOptions = false
     @State private var showCamera = false
     @State private var showPhotoPicker = false
     
     let genderOptions = ["Male", "Female", "Non-binary", "Prefer not to say"]
+    
+    func loadImageIfNeeded() {
+        guard !viewModel.profile.profileImageURL.isEmpty,
+              profileImage == nil,
+              !isLoadingImage else { return }
+        
+        isLoadingImage = true
+        guard let url = URL(string: viewModel.profile.profileImageURL) else { return }
+        
+        URLSession.shared.dataTask(with: url) { data, _, _ in
+            if let data = data, let image = UIImage(data: data) {
+                DispatchQueue.main.async {
+                    self.profileImage = image
+                    self.viewModel.selectedImage = image
+                    self.isLoadingImage = false
+                }
+            }
+        }.resume()
+    }
     
     var body: some View {
         ScrollView {
@@ -191,6 +211,12 @@ struct Step1PersonalView: View {
                                 viewModel.selectedImage = image
                             }
                         }
+                    }
+                    .onAppear {
+                        loadImageIfNeeded()
+                    }
+                    .onChange(of: viewModel.profile.profileImageURL) { _ in
+                        loadImageIfNeeded()
                     }
                     .sheet(isPresented: $showCamera) {
                         CameraView(image: $profileImage)
@@ -415,7 +441,7 @@ struct Step2HousingView: View {
                     .padding()
                     .background(Color.white)
                     .cornerRadius(12)
-                    .labelsHidden()
+                    .frame(maxWidth: .infinity, alignment: .leading)
                 }
                 
                 if !viewModel.errorMessage.isEmpty {
@@ -425,6 +451,7 @@ struct Step2HousingView: View {
                 }
                 
                 // Back and Next buttons
+                Spacer()
                 HStack(spacing: 16) {
                     Button(action: { currentStep = 1 }) {
                         Text("Back")
