@@ -35,7 +35,7 @@ struct MainTabView: View {
             // Custom tab bar
             CustomTabBar(selectedTab: $selectedTab)
                 .padding(.horizontal, 20)
-                .padding(.bottom, 20)
+                .padding(.bottom, 26)
         }
         .ignoresSafeArea(edges: .bottom)
     }
@@ -66,11 +66,9 @@ struct CustomTabBar: View {
                 }) {
                     VStack(spacing: 4) {
                         Image(systemName: isSelected ? tab.selectedIcon : tab.icon)
-                            .font(.system(size: 22))
-                            .foregroundColor(isSelected ? .white : Color.gray.opacity(0.6))
-                        Text(tab.label)
-                            .font(.system(size: 11, weight: isSelected ? .semibold : .regular))
-                            .foregroundColor(isSelected ? .white : Color.gray.opacity(0.6))
+                            .font(.system(size: 24))
+                            .foregroundColor(isSelected ? .white : Color.gray.opacity(0.9))
+                        
                     }
                     .frame(maxWidth: .infinity)
                     .padding(.vertical, 12)
@@ -82,13 +80,13 @@ struct CustomTabBar: View {
                 }
             }
         }
-        .padding(.horizontal, 8)
+        .padding(.horizontal, 7)
         .padding(.vertical, 6)
         .background(
-            // Gray rounded pill background
+            // white rounded pill background
             RoundedRectangle(cornerRadius: 28)
-                .fill(Color(UIColor.systemGray5))
-                .shadow(color: .black.opacity(0.1), radius: 10, x: 0, y: 4)
+                .fill(Color.white)
+                .shadow(color: .black.opacity(0.2), radius: 10, x: 0, y: 4)
         )
     }
 }
