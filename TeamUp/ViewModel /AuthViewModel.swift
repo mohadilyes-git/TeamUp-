@@ -17,6 +17,10 @@ class AuthViewModel: ObservableObject {
     
     // @Published variables automatically update any watching views
     @Published var isLoggedIn = false
+    init() {
+        // Check if user is already logged in when app launches
+        isLoggedIn = Auth.auth().currentUser != nil
+    }
     @Published var errorMessage = ""
     @Published var isLoading = false
     
