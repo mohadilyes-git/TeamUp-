@@ -35,6 +35,9 @@ struct UserProfile: Codable {
     var noiseTolerance: String = ""
     var homePresence: String = ""
     var diet: String = ""
+    var studySchedule: String = ""
+    var privacyLevel: String = ""
+    var communicationStyle: String = ""
     
     // Interests
     var hobbies: [String] = []

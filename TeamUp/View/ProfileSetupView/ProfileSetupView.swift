@@ -512,6 +512,9 @@ struct Step3LifestyleView: View {
     let noiseOptions = ["Low", "Medium", "High"]
     let homeOptions = ["Rarely home", "Sometimes", "Always home"]
     let dietOptions = ["No preference", "Vegetarian", "Vegan", "Halal", "Other"]
+    let studyOptions = ["Morning", "Afternoon", "Night", "No fixed schedule"]
+    let privacyOptions = ["Very private", "Moderate", "Open"]
+    let communicationOptions = ["Direct", "Laid back", "Prefer texting"]
     
     var body: some View {
         ScrollView {
@@ -636,6 +639,45 @@ struct Step3LifestyleView: View {
                     .frame(height: 120)
                     .background(Color.white)
                     .cornerRadius(12)
+                }
+
+                // Study schedule
+                VStack(alignment: .leading, spacing: 8) {
+                    Text("Study Schedule")
+                        .font(.system(size: 14, weight: .medium))
+                        .foregroundColor(.gray)
+                    Picker("Study Schedule", selection: $viewModel.profile.studySchedule) {
+                        ForEach(studyOptions, id: \.self) { option in
+                            Text(option).tag(option)
+                        }
+                    }
+                    .pickerStyle(.segmented)
+                }
+
+                // Privacy level
+                VStack(alignment: .leading, spacing: 8) {
+                    Text("Privacy Level")
+                        .font(.system(size: 14, weight: .medium))
+                        .foregroundColor(.gray)
+                    Picker("Privacy Level", selection: $viewModel.profile.privacyLevel) {
+                        ForEach(privacyOptions, id: \.self) { option in
+                            Text(option).tag(option)
+                        }
+                    }
+                    .pickerStyle(.segmented)
+                }
+
+                // Communication style
+                VStack(alignment: .leading, spacing: 8) {
+                    Text("Communication Style")
+                        .font(.system(size: 14, weight: .medium))
+                        .foregroundColor(.gray)
+                    Picker("Communication Style", selection: $viewModel.profile.communicationStyle) {
+                        ForEach(communicationOptions, id: \.self) { option in
+                            Text(option).tag(option)
+                        }
+                    }
+                    .pickerStyle(.segmented)
                 }
                 
                 HStack(spacing: 16) {
