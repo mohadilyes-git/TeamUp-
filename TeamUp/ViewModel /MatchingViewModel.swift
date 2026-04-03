@@ -1,0 +1,194 @@
+//
+//  MatchingViewModel.swift
+//  TeamUp
+//
+//  Created by Ilyes Mo on 03/04/2026.
+//
+
+import Foundation
+import FirebaseFirestore
+import FirebaseAuth
+import Combine
+
+class MatchingViewModel: ObservableObject {
+    
+    @Published var profiles: [UserProfile] = []
+    @Published var currentIndex = 0
+    @Published var isLoading = false
+    @Published var errorMessage = ""
+    
+    // Load all profiles from Firestore except the current user
+    
+    func loadProfiles() {
+        guard let uid = Auth.auth().currentUser?.uid else { return }
+        isLoading = true
+        
+        let db = Firestore.firestore()
+        db.collection("profiles").getDocuments { snapshot, error in
+            self.isLoading = false
+            if let error = error {
+                self.errorMessage = error.localizedDescription
+                return
+            }
+            
+            guard let documents = snapshot?.documents else { return }
+            
+            // Decode each document into a UserProfile and exclude current user
+            
+            self.profiles = documents.compactMap { doc in
+                try? Firestore.Decoder().decode(UserProfile.self, from: doc.data())
+            }.filter { $0.uid != uid }
+        }
+    }
+    
+    // Calculate compatibility score between current user and another user
+    
+    func compatibilityScore(currentUser: UserProfile, otherUser: UserProfile) -> Int {
+        var score = 0
+        let maxScore = 110
+        
+        // Preferred area match - 20 points
+        
+        if currentUser.preferredArea == otherUser.preferredArea {
+            score += 20
+        }
+        
+        // Budget match within £200 - 15 points
+        
+        if abs(currentUser.budget - otherUser.budget) <= 200 {
+            score += 15
+        }
+        
+        // Sleep schedule match - 15 points
+        
+        if currentUser.sleepSchedule == otherUser.sleepSchedule {
+            score += 15
+        }
+        
+        // Cleanliness match within 1 point - 10 points
+        
+        if abs(currentUser.cleanliness - otherUser.cleanliness) <= 1 {
+            score += 10
+        }
+        
+        // Smoker match - 10 points
+        
+        if currentUser.isSmoker == otherUser.isSmoker {
+            score += 10
+        }
+        
+        // Pet friendly match - 10 points
+        
+        if currentUser.isPetFriendly == otherUser.isPetFriendly {
+            score += 10
+        }
+        
+        // Guest frequency match - 5 points
+        
+        if currentUser.guestFrequency == otherUser.guestFrequency {
+            score += 5
+        }
+        
+        // Noise tolerance match - 5 points
+        
+        if currentUser.noiseTolerance == otherUser.noiseTolerance {
+            score += 5
+        }
+        
+        // Home presence match - 5 points
+        
+        if currentUser.homePresence == otherUser.homePresence {
+            score += 5
+        }
+        
+        // Diet match - 5 points
+        
+        if currentUser.diet == otherUser.diet {
+            score += 5
+        }
+        
+        // Study schedule match - 5 points
+        
+        if currentUser.studySchedule == otherUser.studySchedule {
+            score += 5
+        }
+        
+        // Privacy level match - 3 points
+        
+        if currentUser.privacyLevel == otherUser.privacyLevel {
+            score += 3
+        }
+        
+        // Communication style match - 3 points
+        
+        if currentUser.communicationStyle == otherUser.communicationStyle {
+            score += 3
+        }
+        
+        // Shared hobbies - 2 points each up to max 10
+        
+        let sharedHobbies = currentUser.hobbies.filter { otherUser.hobbies.contains($0) }
+        score += min(sharedHobbies.count * 2, 10)
+        
+        // Convert to percentage
+        
+        return Int((Double(score) / Double(maxScore)) * 100)
+    }
+    
+    
+    // Record a swipe in Firestore
+    
+    
+    func swipe(direction: SwipeDirection, currentUser: UserProfile, swipedUser: UserProfile) {
+        guard let uid = Auth.auth().currentUser?.uid else { return }
+        
+        let db = Firestore.firestore()
+        
+        // Save the swipe
+        db.collection("swipes").document(uid).collection("userSwipes").document(swipedUser.uid).setData([
+            "direction": direction.rawValue,
+            "timestamp": Timestamp()
+        ])
+        
+        // If swiped right check for mutual match
+        
+        if direction == .right {
+            checkForMatch(currentUserUID: uid, swipedUserUID: swipedUser.uid, currentUser: currentUser, swipedUser: swipedUser)
+        }
+        
+        // Move to next profile
+        
+        DispatchQueue.main.async {
+            self.currentIndex += 1
+        }
+    }
+    
+    // Check if the other user also swiped right
+    
+    private func checkForMatch(currentUserUID: String, swipedUserUID: String, currentUser: UserProfile, swipedUser: UserProfile) {
+        let db = Firestore.firestore()
+        
+        db.collection("swipes").document(swipedUserUID).collection("userSwipes").document(currentUserUID).getDocument { snapshot, error in
+            guard let data = snapshot?.data(),
+                  let direction = data["direction"] as? String,
+                  direction == "right" else { return }
+            
+            // It's a match! Save to matches collection
+            let matchData: [String: Any] = [
+                "users": [currentUserUID, swipedUserUID],
+                "timestamp": Timestamp(),
+                "compatibilityScore": self.compatibilityScore(currentUser: currentUser, otherUser: swipedUser)
+            ]
+            
+            db.collection("matches").document("\(currentUserUID)_\(swipedUserUID)").setData(matchData)
+            db.collection("matches").document("\(swipedUserUID)_\(currentUserUID)").setData(matchData)
+        }
+    }
+}
+
+// Swipe direction enum
+
+enum SwipeDirection: String {
+    case left = "left"
+    case right = "right"
+}

@@ -47,6 +47,7 @@ struct RegisterView: View {
                     .animation(.easeInOut(duration: 1), value: currentSlide)
                 
                 // Dark overlay so text is readable over the photos
+                
                 Color.black.opacity(0.5)
                     .ignoresSafeArea()
                 
@@ -105,7 +106,9 @@ struct RegisterView: View {
                     }
                     .padding(.horizontal)
                     
+                    
                     // Shows error message if registration fails
+                    
                     if !viewModel.errorMessage.isEmpty {
                         Text(viewModel.errorMessage)
                             .foregroundColor(.red)
@@ -113,7 +116,7 @@ struct RegisterView: View {
                             .padding(.horizontal)
                     }
                     
-                    // Register button - validates passwords then calls Firebase
+                    // Register button validates passwords then calls Firebase
                     Button(action: {
                         guard password == confirmPassword else {
                             viewModel.errorMessage = "Passwords do not match"
