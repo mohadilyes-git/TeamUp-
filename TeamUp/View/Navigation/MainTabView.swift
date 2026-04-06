@@ -21,13 +21,13 @@ struct MainTabView: View {
             // Show the correct screen based on selected tab
             Group {
                 if selectedTab == 0 {
-                    
+                    BrowseView()
                 } else if selectedTab == 1 {
                     
                 } else if selectedTab == 2 {
                     
                 } else {
-                    
+                    SettingsView()
                 }
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity)
