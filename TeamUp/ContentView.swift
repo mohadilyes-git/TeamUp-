@@ -14,7 +14,7 @@ struct ContentView: View {
     
     var body: some View {
         if authViewModel.isLoggedIn {
-            // User already logged in  go straight to HomeView
+            // User already logged in  go straight to MainTabview
             MainTabView()
         } else {
             // User not logged in  show splash then login

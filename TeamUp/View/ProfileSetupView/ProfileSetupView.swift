@@ -61,7 +61,7 @@ struct ProfileSetupView: View {
         }
         .navigationBarBackButtonHidden(!isEditMode)
         .navigationDestination(isPresented: $viewModel.isSaved) {
-            HomeView()
+            MainTabView()
         }
     }
 }
@@ -236,7 +236,7 @@ struct Step1PersonalView: View {
                 .frame(maxWidth: .infinity)
                 .padding(.top)
                 
-                // Full name - pre-filled from registration
+                // Full name  pre-filled from registration
                 VStack(alignment: .leading, spacing: 8) {
                     Text("Full Name")
                         .font(.system(size: 14, weight: .medium))
@@ -408,7 +408,7 @@ struct Step2HousingView: View {
                     }
                 }
                 
-                // Preferred area - full UK list
+                // Preferred area  full UK list
                 VStack(alignment: .leading, spacing: 8) {
                     Text("Preferred Area")
                         .font(.system(size: 14, weight: .medium))
@@ -426,7 +426,7 @@ struct Step2HousingView: View {
                 }
                 
                 
-                // Move in date - stored as Date
+                // Move in date stored as Date
                 VStack(alignment: .leading, spacing: 8) {
                     Text("Move In Date")
                         .font(.system(size: 14, weight: .medium))
