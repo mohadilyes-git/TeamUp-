@@ -39,10 +39,10 @@ struct ProfileSetupView: View {
             }
         }
         .onAppear {
+            // Hide tab bar
+            NotificationCenter.default.post(name: Notification.Name("hideTabBar"), object: nil)
             // Load existing profile data
             viewModel.loadProfile()
-            
-            // If no name in profile yet, get it from users collection
             if viewModel.profile.name.isEmpty {
                 if let uid = Auth.auth().currentUser?.uid {
                     let db = Firestore.firestore()
@@ -59,6 +59,13 @@ struct ProfileSetupView: View {
                 }
             }
         }
+        .onDisappear {
+            NotificationCenter.default.post(name: Notification.Name("showTabBar"), object: nil)
+        }
+        .onDisappear {
+            NotificationCenter.default.post(name: Notification.Name("showTabBar"), object: nil)
+        }
+        
         .navigationBarBackButtonHidden(!isEditMode)
         .navigationDestination(isPresented: $viewModel.isSaved) {
             MainTabView()

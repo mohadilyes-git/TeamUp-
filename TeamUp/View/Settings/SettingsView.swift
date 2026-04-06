@@ -5,15 +5,21 @@
 //  Created by Ilyes Mo on 05/04/2026.
 //
 
+//
+//  SettingsView.swift
+//  TeamUp
+//
+//  Created by Ilyes Mo on 03/04/2026.
+//
+
 import SwiftUI
 import FirebaseAuth
 
 struct SettingsView: View {
     
     @StateObject private var profileVM = ProfileViewModel()
-    @StateObject private var authVM = AuthViewModel()
+    @EnvironmentObject var authVM: AuthViewModel
     @State private var showSignOutAlert = false
-    @State private var navigateToLogin = false
     
     var body: some View {
         NavigationStack {
@@ -25,7 +31,6 @@ struct SettingsView: View {
                         
                         // Profile header
                         VStack(spacing: 12) {
-                            // Profile image
                             if !profileVM.profile.profileImageURL.isEmpty {
                                 AsyncImage(url: URL(string: profileVM.profile.profileImageURL)) { image in
                                     image
@@ -87,7 +92,7 @@ struct SettingsView: View {
                             
                             Divider().padding(.leading, 56)
                             
-                            // Privacy (placeholder)
+                            // Privacy
                             SettingsRowView(
                                 icon: "lock.fill",
                                 title: "Privacy",
@@ -140,15 +145,14 @@ struct SettingsView: View {
             .alert("Sign Out", isPresented: $showSignOutAlert) {
                 Button("Cancel", role: .cancel) {}
                 Button("Sign Out", role: .destructive) {
-                    authVM.logout()
-                    navigateToLogin = true
+                    // Hide tab bar first then sign out
+                    NotificationCenter.default.post(name: Notification.Name("hideTabBar"), object: nil)
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                        authVM.logout()
+                    }
                 }
             } message: {
                 Text("Are you sure you want to sign out?")
-            }
-            .navigationDestination(isPresented: $navigateToLogin) {
-                LoginView()
-                    .navigationBarBackButtonHidden(true)
             }
         }
     }
@@ -182,6 +186,7 @@ struct SettingsRowView: View {
         .padding()
     }
 }
+
 #Preview {
     SettingsView()
 }

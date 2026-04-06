@@ -11,6 +11,7 @@ import SwiftUI
 struct MainTabView: View {
     
     @State private var selectedTab = 0
+    @State private var showTabBar = true
     
     var body: some View {
         ZStack(alignment: .bottom) {
@@ -28,16 +29,26 @@ struct MainTabView: View {
                     
                 } else {
                     SettingsView()
+                        .environmentObject(AuthViewModel())
                 }
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity)
             
-            // Custom tab bar
-            CustomTabBar(selectedTab: $selectedTab)
-                .padding(.horizontal, 20)
-                .padding(.bottom, 26)
+            // Only show tab bar when showTabBar is true
+            if showTabBar {
+                CustomTabBar(selectedTab: $selectedTab)
+                    .padding(.horizontal, 20)
+                    .padding(.bottom, 26)
+            }
         }
         .ignoresSafeArea(edges: .bottom)
+        // Listen for notifications to show/hide tab bar
+        .onReceive(NotificationCenter.default.publisher(for: Notification.Name("hideTabBar"))) { _ in
+                    withAnimation { showTabBar = false }
+                }
+        .onReceive(NotificationCenter.default.publisher(for: Notification.Name("showTabBar"))) { _ in
+                    withAnimation { showTabBar = true }
+                }
     }
 }
 
