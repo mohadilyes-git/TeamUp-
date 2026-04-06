@@ -30,7 +30,7 @@ struct LoginView: View {
         
         // If logged in successfully, go to HomeView
         if viewModel.isLoggedIn {
-            HomeView()
+            MainTabView()
         } else {
             
             // NavigationStack allows navigation between screens
@@ -99,7 +99,7 @@ struct LoginView: View {
                                 .padding(.horizontal)
                         }
                         
-                        // Login button - calls Firebase authentication
+                        // Login button  calls Firebase authentication
                         Button(action: {
                             viewModel.login(email: email, password: password)
                         }) {

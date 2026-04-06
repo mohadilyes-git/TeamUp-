@@ -23,8 +23,8 @@ struct MainTabView: View {
                 if selectedTab == 0 {
                     BrowseView()
                 } else if selectedTab == 1 {
-                    
-                } else if selectedTab == 2 {
+                    MatchesView()               }
+                else if selectedTab == 2 {
                     
                 } else {
                     SettingsView()
