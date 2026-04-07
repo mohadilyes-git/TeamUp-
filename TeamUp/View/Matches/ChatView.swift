@@ -111,6 +111,10 @@ struct ChatView: View {
         .navigationBarTitleDisplayMode(.inline)
         .onAppear {
             loadMessages()
+            NotificationCenter.default.post(name: Notification.Name("hideTabBar"), object: nil)
+        }
+        .onDisappear {
+            NotificationCenter.default.post(name: Notification.Name("showTabBar"), object: nil)
         }
     }
     
