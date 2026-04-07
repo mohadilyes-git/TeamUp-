@@ -5,6 +5,7 @@
 //  Created by Ilyes Mo on 23/03/2026.
 //
 
+
 import Foundation
 import Combine
 import Firebase
@@ -12,24 +13,27 @@ import FirebaseAuth
 import FirebaseFirestore
 
 // AuthViewModel handles all authentication logic
-// Conforms to ObservableObject so views can watch for changes
 class AuthViewModel: ObservableObject {
     
-    // @Published variables automatically update any watching views
     @Published var isLoggedIn = false
-    init() {
-        // Check if user is already logged in when app launches
-        isLoggedIn = Auth.auth().currentUser != nil
-    }
     @Published var errorMessage = ""
     @Published var isLoading = false
+    
+    init() {
+        // Firebase listens to auth state in real time
+        // This fires on ALL instances when auth changes
+        Auth.auth().addStateDidChangeListener { _, user in
+            DispatchQueue.main.async {
+                self.isLoggedIn = user != nil
+            }
+        }
+    }
     
     // Register a new user with email and password
     func register(name: String, email: String, password: String) {
         isLoading = true
         errorMessage = ""
         
-        // Step 1  Create the account in Firebase Auth
         Auth.auth().createUser(withEmail: email, password: password) { result, error in
             self.isLoading = false
             if let error = error {
@@ -37,7 +41,6 @@ class AuthViewModel: ObservableObject {
                 return
             }
             
-            // Step 2  Save the name to Firestore
             guard let uid = result?.user.uid else { return }
             let db = Firestore.firestore()
             db.collection("users").document(uid).setData([
@@ -48,9 +51,7 @@ class AuthViewModel: ObservableObject {
             ]) { error in
                 if let error = error {
                     self.errorMessage = error.localizedDescription
-                    return
                 }
-                self.isLoggedIn = true
             }
         }
     }
@@ -59,19 +60,16 @@ class AuthViewModel: ObservableObject {
     func login(email: String, password: String) {
         isLoading = true
         errorMessage = ""
-        Auth.auth().signIn(withEmail: email, password: password) { result, error in
+        Auth.auth().signIn(withEmail: email, password: password) { _, error in
             self.isLoading = false
             if let error = error {
                 self.errorMessage = error.localizedDescription
-                return
             }
-            self.isLoggedIn = true
         }
     }
     
     // Log out the current user
     func logout() {
         try? Auth.auth().signOut()
-        isLoggedIn = false
     }
 }

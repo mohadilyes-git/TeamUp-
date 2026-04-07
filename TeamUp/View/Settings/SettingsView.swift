@@ -145,11 +145,7 @@ struct SettingsView: View {
             .alert("Sign Out", isPresented: $showSignOutAlert) {
                 Button("Cancel", role: .cancel) {}
                 Button("Sign Out", role: .destructive) {
-                    // Hide tab bar first then sign out
-                    NotificationCenter.default.post(name: Notification.Name("hideTabBar"), object: nil)
-                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-                        authVM.logout()
-                    }
+                    authVM.logout()
                 }
             } message: {
                 Text("Are you sure you want to sign out?")

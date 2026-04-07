@@ -12,6 +12,7 @@ struct MainTabView: View {
     
     @State private var selectedTab = 0
     @State private var showTabBar = true
+    @StateObject private var authViewModel = AuthViewModel()
     
     var body: some View {
         ZStack(alignment: .bottom) {
@@ -29,7 +30,7 @@ struct MainTabView: View {
                     
                 } else {
                     SettingsView()
-                        .environmentObject(AuthViewModel())
+                        .environmentObject(authViewModel)
                 }
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity)
@@ -104,4 +105,5 @@ struct CustomTabBar: View {
 
 #Preview {
     MainTabView()
+        
 }
