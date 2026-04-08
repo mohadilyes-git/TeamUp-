@@ -67,10 +67,11 @@ struct ProfileSetupView: View {
         }
         
         .navigationBarBackButtonHidden(!isEditMode)
-        .navigationDestination(isPresented: $viewModel.isSaved) {
-            MainTabView()
-        }
-    }
+        .onChange(of: viewModel.isSaved) { saved in
+            if saved && !isEditMode {
+                NotificationCenter.default.post(name: Notification.Name("profileSaved"), object: nil)
+            }
+        }    }
 }
 
 // Hex colour extension

@@ -55,6 +55,9 @@ struct ContentView: View {
                 hasProfile = nil
             }
         }
+        .onReceive(NotificationCenter.default.publisher(for: Notification.Name("profileSaved"))) { _ in
+            hasProfile = true
+        }
     }
     
     // Check if user has a profile in Firestore
