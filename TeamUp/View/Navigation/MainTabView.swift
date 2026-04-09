@@ -27,7 +27,7 @@ struct MainTabView: View {
                 } else if selectedTab == 1 {
                     MatchesView()               }
                 else if selectedTab == 2 {
-                    
+                    GuideView()
                 } else {
                     SettingsView()
                         .environmentObject(authViewModel)
