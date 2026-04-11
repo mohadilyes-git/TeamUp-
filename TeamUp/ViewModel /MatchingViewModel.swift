@@ -24,20 +24,28 @@ class MatchingViewModel: ObservableObject {
         isLoading = true
         
         let db = Firestore.firestore()
-        db.collection("profiles").getDocuments { snapshot, error in
-            self.isLoading = false
-            if let error = error {
-                self.errorMessage = error.localizedDescription
-                return
+        
+        // First get all profiles the user has already swiped on
+        db.collection("swipes").document(uid).collection("userSwipes").getDocuments { swipeSnapshot, _ in
+            
+            // Get UIDs of already swiped profiles
+            let swipedUIDs = Set(swipeSnapshot?.documents.map { $0.documentID } ?? [])
+            
+            // Then load all profiles
+            db.collection("profiles").getDocuments { snapshot, error in
+                self.isLoading = false
+                if let error = error {
+                    self.errorMessage = error.localizedDescription
+                    return
+                }
+                
+                guard let documents = snapshot?.documents else { return }
+                
+                // Filter out current user AND already swiped profiles
+                self.profiles = documents.compactMap { doc in
+                    try? Firestore.Decoder().decode(UserProfile.self, from: doc.data())
+                }.filter { $0.uid != uid && !swipedUIDs.contains($0.uid) }
             }
-            
-            guard let documents = snapshot?.documents else { return }
-            
-            // Decode each document into a UserProfile and exclude current user
-            
-            self.profiles = documents.compactMap { doc in
-                try? Firestore.Decoder().decode(UserProfile.self, from: doc.data())
-            }.filter { $0.uid != uid }
         }
     }
     
