@@ -45,6 +45,7 @@ class MatchingViewModel: ObservableObject {
                 self.profiles = documents.compactMap { doc in
                     try? Firestore.Decoder().decode(UserProfile.self, from: doc.data())
                 }.filter { $0.uid != uid && !swipedUIDs.contains($0.uid) }
+                self.currentIndex = 0
             }
         }
     }
@@ -192,8 +193,57 @@ class MatchingViewModel: ObservableObject {
             db.collection("matches").document("\(swipedUserUID)_\(currentUserUID)").setData(matchData)
         }
     }
+    // Apply filters to profiles
+    func applyFilters(_ filters: FilterOptions) -> [UserProfile] {
+        return profiles.filter { profile in
+            
+            // Area filter
+            if !filters.preferredArea.isEmpty && profile.preferredArea != filters.preferredArea {
+                return false
+            }
+            
+            // Budget filter
+            if profile.budget < filters.minBudget || profile.budget > filters.maxBudget {
+                return false
+            }
+            
+            // Sleep schedule filter
+            if !filters.sleepSchedule.isEmpty && profile.sleepSchedule != filters.sleepSchedule {
+                return false
+            }
+            
+            // smoking filter
+            if filters.nonSmokersOnly && profile.isSmoker {
+                return false
+            }
+            
+            // Pet friendly filter
+            if filters.petFriendlyOnly && !profile.isPetFriendly {
+                return false
+            }
+            
+            // Communication style filter
+            if !filters.communicationStyle.isEmpty && profile.communicationStyle != filters.communicationStyle {
+                return false
+            }
+            
+            // Noise tolerance filter
+            if !filters.noiseTolerance.isEmpty && profile.noiseTolerance != filters.noiseTolerance {
+                return false
+            }
+            
+            // Guest frequency filter
+            if !filters.guestFrequency.isEmpty && profile.guestFrequency != filters.guestFrequency {
+                return false
+            }
+            // Gender filter
+            if !filters.genderPreference.isEmpty && profile.gender != filters.genderPreference {
+                return false
+            }
+            return true
+        }
+    }
 }
-
 // Swipe direction enum
 
 enum SwipeDirection: String {

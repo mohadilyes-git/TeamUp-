@@ -13,6 +13,8 @@ struct MainTabView: View {
     @State private var selectedTab = 0
     @State private var showTabBar = true
     @StateObject private var authViewModel = AuthViewModel()
+    @StateObject private var matchingVM = MatchingViewModel()
+    @StateObject private var profileVM = ProfileViewModel()
     
     var body: some View {
         ZStack(alignment: .bottom) {
@@ -23,7 +25,7 @@ struct MainTabView: View {
             // Show the correct screen based on selected tab
             Group {
                 if selectedTab == 0 {
-                    BrowseView()
+                    BrowseView(matchingVM: matchingVM, profileVM: profileVM)
                 } else if selectedTab == 1 {
                     MatchesView()               }
                 else if selectedTab == 2 {

@@ -11,8 +11,13 @@ import Kingfisher
 
 struct BrowseView: View {
     
-    @StateObject private var matchingVM = MatchingViewModel()
-    @StateObject private var profileVM = ProfileViewModel()
+    @ObservedObject var matchingVM: MatchingViewModel
+    @ObservedObject var profileVM: ProfileViewModel
+    @State private var showFilter = false
+    @State private var filters = FilterOptions()
+    var filteredProfiles: [UserProfile] {
+        matchingVM.applyFilters(filters)
+    }
     
     var body: some View {
         NavigationStack {
@@ -22,7 +27,7 @@ struct BrowseView: View {
                 if matchingVM.isLoading {
                     ProgressView()
                         .tint(Color(red: 0.498, green: 0.467, blue: 0.867))
-                } else if matchingVM.currentIndex >= matchingVM.profiles.count {
+                } else if matchingVM.currentIndex >= filteredProfiles.count {
                     // No more profiles
                     VStack(spacing: 16) {
                         Image(systemName: "person.2.slash")
@@ -53,7 +58,7 @@ struct BrowseView: View {
                         // Card stack
                         ZStack {
                             // Show next card behind current
-                            if matchingVM.currentIndex + 1 < matchingVM.profiles.count {
+                            if matchingVM.currentIndex + 1 < filteredProfiles.count {
                                 ProfileCardView(
                                     profile: matchingVM.profiles[matchingVM.currentIndex + 1],
                                     score: matchingVM.compatibilityScore(
@@ -67,23 +72,23 @@ struct BrowseView: View {
                             
                             // Current card
                             NavigationLink(destination: UserProfileView(
-                                profile: matchingVM.profiles[matchingVM.currentIndex],
+                                profile: filteredProfiles[matchingVM.currentIndex],
                                 score: matchingVM.compatibilityScore(
                                     currentUser: profileVM.profile,
-                                    otherUser: matchingVM.profiles[matchingVM.currentIndex]
+                                    otherUser: filteredProfiles[matchingVM.currentIndex]
                                 )
                             )) {
                                 SwipeableCardView(
-                                    profile: matchingVM.profiles[matchingVM.currentIndex],
+                                    profile: filteredProfiles[matchingVM.currentIndex],
                                     score: matchingVM.compatibilityScore(
                                         currentUser: profileVM.profile,
-                                        otherUser: matchingVM.profiles[matchingVM.currentIndex]
+                                        otherUser: filteredProfiles[matchingVM.currentIndex]
                                     ),
                                     onSwipe: { direction in
                                         matchingVM.swipe(
                                             direction: direction,
                                             currentUser: profileVM.profile,
-                                            swipedUser: matchingVM.profiles[matchingVM.currentIndex]
+                                            swipedUser: filteredProfiles[matchingVM.currentIndex]
                                         )
                                     }
                                 )
@@ -99,7 +104,7 @@ struct BrowseView: View {
                                 matchingVM.swipe(
                                     direction: .left,
                                     currentUser: profileVM.profile,
-                                    swipedUser: matchingVM.profiles[matchingVM.currentIndex]
+                                    swipedUser: filteredProfiles[matchingVM.currentIndex]
                                 )
                             }) {
                                 Image(systemName: "xmark")
@@ -116,7 +121,7 @@ struct BrowseView: View {
                                 matchingVM.swipe(
                                     direction: .right,
                                     currentUser: profileVM.profile,
-                                    swipedUser: matchingVM.profiles[matchingVM.currentIndex]
+                                    swipedUser: filteredProfiles[matchingVM.currentIndex]
                                 )
                             }) {
                                 Image(systemName: "heart.fill")
@@ -137,6 +142,17 @@ struct BrowseView: View {
             .onAppear {
                 matchingVM.loadProfiles()
                 profileVM.loadProfile()
+            }
+            .toolbar {
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    Button(action: { showFilter = true }) {
+                        Image(systemName: "slider.horizontal.3")
+                            .foregroundColor(Color(red: 0.498, green: 0.467, blue: 0.867))
+                    }
+                }
+            }
+            .sheet(isPresented: $showFilter) {
+                FilterView(filters: $filters, isPresented: $showFilter)
             }
         }
     }
