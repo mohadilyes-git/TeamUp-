@@ -137,13 +137,19 @@ struct BrowseView: View {
                     }
                 }
             }
-            .navigationTitle("Discover")
-            .navigationBarTitleDisplayMode(.large)
+            .navigationTitle("")
+            .navigationBarTitleDisplayMode(.inline)
             .onAppear {
                 matchingVM.loadProfiles()
                 profileVM.loadProfile()
             }
             .toolbar {
+                ToolbarItem(placement: .navigationBarLeading) {
+                        Text("TeamUp")
+                            .font(.system(size: 43, weight: .bold))
+                            .foregroundColor(Color(red: 0.498, green: 0.467, blue: 0.867))
+                            .fixedSize()
+                    }
                 ToolbarItem(placement: .navigationBarTrailing) {
                     Button(action: { showFilter = true }) {
                         Image(systemName: "slider.horizontal.3")
@@ -312,4 +318,7 @@ struct SwipeableCardView: View {
                     }
             )
     }
+}
+#Preview {
+    BrowseView(matchingVM: MatchingViewModel(), profileVM: ProfileViewModel())
 }
