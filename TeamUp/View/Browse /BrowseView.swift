@@ -154,8 +154,7 @@ struct ProfileCardView: View {
                 KFImage(URL(string: profile.profileImageURL))
                     .resizable()
                     .scaledToFill()
-                    .frame(maxWidth: .infinity)
-                    .frame(height: 520)
+                    .frame(width: UIScreen.main.bounds.width - 32, height: 520)
                     .clipped()
             }
             else {
