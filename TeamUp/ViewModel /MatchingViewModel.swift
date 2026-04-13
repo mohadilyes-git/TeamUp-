@@ -9,6 +9,9 @@ import Foundation
 import FirebaseFirestore
 import FirebaseAuth
 import Combine
+import UserNotifications
+
+
 
 class MatchingViewModel: ObservableObject {
     
@@ -191,7 +194,40 @@ class MatchingViewModel: ObservableObject {
             
             db.collection("matches").document("\(currentUserUID)_\(swipedUserUID)").setData(matchData)
             db.collection("matches").document("\(swipedUserUID)_\(currentUserUID)").setData(matchData)
+            
+            // Send local notification
+            DispatchQueue.main.async {
+                self.sendMatchNotification(matchedUserName: swipedUser.name)
+            }
+            
         }
+    }
+    
+    // Send local notification for new message
+    func sendMessageNotification(senderName: String, message: String) {
+        let content = UNMutableNotificationContent()
+        content.title = senderName
+        content.body = message
+        content.sound = .default
+        
+        let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 1, repeats: false)
+        let request = UNNotificationRequest(identifier: UUID().uuidString, content: content, trigger: trigger)
+        
+        UNUserNotificationCenter.current().add(request)
+    }
+    
+    // Send local notification when a match is found
+    func sendMatchNotification(matchedUserName: String) {
+        let content = UNMutableNotificationContent()
+        content.title = "New Match! 🎉"
+        content.body = "You and \(matchedUserName) liked each other!"
+        content.sound = .default
+        
+        // Show immediately
+        let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 1, repeats: false)
+        let request = UNNotificationRequest(identifier: UUID().uuidString, content: content, trigger: trigger)
+        
+        UNUserNotificationCenter.current().add(request)
     }
     // Apply filters to profiles
     func applyFilters(_ filters: FilterOptions) -> [UserProfile] {

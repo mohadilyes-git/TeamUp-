@@ -132,7 +132,8 @@ struct ChatView: View {
                 guard let documents = snapshot?.documents else { return }
                 
                 // Convert Firestore documents to Message objects
-                messages = documents.compactMap { doc in
+                let oldCount = self.messages.count
+                let newMessages = documents.compactMap { doc -> Message? in
                     let data = doc.data()
                     guard let text = data["text"] as? String,
                           let senderUID = data["senderUID"] as? String,
@@ -145,6 +146,21 @@ struct ChatView: View {
                         timestamp: timestamp.dateValue()
                     )
                 }
+
+                // Check for new messages from other user
+                if oldCount > 0 && newMessages.count > oldCount {
+                    let newMessage = newMessages.last!
+                    if !newMessage.isFromCurrentUser {
+                        // Send notification for new message
+                        let notificationVM = MatchingViewModel()
+                        notificationVM.sendMessageNotification(
+                            senderName: self.match.name,
+                            message: newMessage.text
+                        )
+                    }
+                }
+
+                self.messages = newMessages
             }
     }
     

@@ -116,6 +116,7 @@ struct RegisterView: View {
                             .padding(.horizontal)
                     }
                     
+                    
                     // Register button validates passwords then calls Firebase
                     Button(action: {
                         guard password == confirmPassword else {
@@ -138,6 +139,7 @@ struct RegisterView: View {
                     .background(Color(red: 0.498, green: 0.467, blue: 0.867))
                     .cornerRadius(12)
                     .padding(.horizontal)
+                    
                     
                     // Link back to login screen
                     NavigationLink(destination: LoginView()) {
