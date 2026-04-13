@@ -9,6 +9,7 @@ import SwiftUI
 import FirebaseAuth
 import PhotosUI
 import FirebaseFirestore
+import Kingfisher
 
 struct ProfileSetupView: View {
     
@@ -141,15 +142,16 @@ struct Step1PersonalView: View {
         isLoadingImage = true
         guard let url = URL(string: viewModel.profile.profileImageURL) else { return }
         
-        URLSession.shared.dataTask(with: url) { data, _, _ in
-            if let data = data, let image = UIImage(data: data) {
+        // Use Kingfisher for cached image loading
+            KingfisherManager.shared.retrieveImage(with: url) { result in
                 DispatchQueue.main.async {
-                    self.profileImage = image
-                    self.viewModel.selectedImage = image
                     self.isLoadingImage = false
+                    if case .success(let value) = result {
+                        self.profileImage = value.image
+                        self.viewModel.selectedImage = value.image
                 }
             }
-        }.resume()
+        }
     }
     
     var body: some View {
