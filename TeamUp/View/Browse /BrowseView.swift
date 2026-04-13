@@ -54,87 +54,48 @@ struct BrowseView: View {
                         .padding(.horizontal)
                     }
                 } else {
-                    VStack(spacing: 20) {
-                        // Card stack
-                        ZStack {
-                            // Show next card behind current
-                            if matchingVM.currentIndex + 1 < filteredProfiles.count {
-                                ProfileCardView(
-                                    profile: matchingVM.profiles[matchingVM.currentIndex + 1],
-                                    score: matchingVM.compatibilityScore(
-                                        currentUser: profileVM.profile,
-                                        otherUser: matchingVM.profiles[matchingVM.currentIndex + 1]
-                                    )
+                    ZStack {
+                        // Show next card behind current
+                        if matchingVM.currentIndex + 1 < filteredProfiles.count {
+                            ProfileCardView(
+                                profile: filteredProfiles[matchingVM.currentIndex + 1],
+                                score: matchingVM.compatibilityScore(
+                                    currentUser: profileVM.profile,
+                                    otherUser: filteredProfiles[matchingVM.currentIndex + 1]
                                 )
-                                .scaleEffect(0.95)
-                                .offset(y: 10)
-                            }
-                            
-                            // Current card
-                            NavigationLink(destination: UserProfileView(
+                            )
+                            .scaleEffect(0.95)
+                            .offset(y: 10)
+                        }
+                        
+                        // Current card
+                        NavigationLink(destination: UserProfileView(
+                            profile: filteredProfiles[matchingVM.currentIndex],
+                            score: matchingVM.compatibilityScore(
+                                currentUser: profileVM.profile,
+                                otherUser: filteredProfiles[matchingVM.currentIndex]
+                            )
+                        )) {
+                            SwipeableCardView(
                                 profile: filteredProfiles[matchingVM.currentIndex],
                                 score: matchingVM.compatibilityScore(
                                     currentUser: profileVM.profile,
                                     otherUser: filteredProfiles[matchingVM.currentIndex]
-                                )
-                            )) {
-                                SwipeableCardView(
-                                    profile: filteredProfiles[matchingVM.currentIndex],
-                                    score: matchingVM.compatibilityScore(
+                                ),
+                                onSwipe: { direction in
+                                    matchingVM.swipe(
+                                        direction: direction,
                                         currentUser: profileVM.profile,
-                                        otherUser: filteredProfiles[matchingVM.currentIndex]
-                                    ),
-                                    onSwipe: { direction in
-                                        matchingVM.swipe(
-                                            direction: direction,
-                                            currentUser: profileVM.profile,
-                                            swipedUser: filteredProfiles[matchingVM.currentIndex]
-                                        )
-                                    }
-                                )
-                            }
-                            .buttonStyle(.plain)
+                                        swipedUser: filteredProfiles[matchingVM.currentIndex]
+                                    )
+                                }
+                            )
                         }
-                        .padding(.horizontal)
-                        
-                        // Action buttons - outside card ZStack
-                        HStack(spacing: 40) {
-                            // Dislike button
-                            Button(action: {
-                                matchingVM.swipe(
-                                    direction: .left,
-                                    currentUser: profileVM.profile,
-                                    swipedUser: filteredProfiles[matchingVM.currentIndex]
-                                )
-                            }) {
-                                Image(systemName: "xmark")
-                                    .font(.system(size: 28, weight: .bold))
-                                    .foregroundColor(.red)
-                                    .frame(width: 70, height: 70)
-                                    .background(Color.white)
-                                    .clipShape(Circle())
-                                    .shadow(color: .black.opacity(0.1), radius: 8)
-                            }
-                            
-                            // Like button
-                            Button(action: {
-                                matchingVM.swipe(
-                                    direction: .right,
-                                    currentUser: profileVM.profile,
-                                    swipedUser: filteredProfiles[matchingVM.currentIndex]
-                                )
-                            }) {
-                                Image(systemName: "heart.fill")
-                                    .font(.system(size: 28))
-                                    .foregroundColor(.white)
-                                    .frame(width: 70, height: 70)
-                                    .background(Color(red: 0.498, green: 0.467, blue: 0.867))
-                                    .clipShape(Circle())
-                                    .shadow(color: .black.opacity(0.1), radius: 8)
-                            }
-                        }
-                        .padding(.bottom, 100)
+                        .buttonStyle(.plain)
                     }
+                    .padding(.horizontal, 12)
+                    .padding(.top, 16)
+                    .padding(.bottom, 100)
                 }
             }
             .navigationTitle("")
@@ -176,7 +137,7 @@ struct ProfileCardView: View {
                 KFImage(URL(string: profile.profileImageURL))
                     .resizable()
                     .scaledToFill()
-                    .frame(width: UIScreen.main.bounds.width - 32, height: 520)
+                    .frame(width: UIScreen.main.bounds.width * 0.98, height: UIScreen.main.bounds.height * 0.75)
                     .clipped()
             }
             else {
@@ -187,7 +148,7 @@ struct ProfileCardView: View {
                         .foregroundColor(.gray)
                 }
                 .frame(maxWidth: .infinity)
-                .frame(height: 520)
+                .frame(height: UIScreen.main.bounds.height * 0.85)
             }
             
             // Gradient overlay at bottom
