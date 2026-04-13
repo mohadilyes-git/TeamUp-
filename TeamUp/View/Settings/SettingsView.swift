@@ -14,6 +14,7 @@
 
 import SwiftUI
 import FirebaseAuth
+import Kingfisher
 
 struct SettingsView: View {
     
@@ -32,22 +33,11 @@ struct SettingsView: View {
                         // Profile header
                         VStack(spacing: 12) {
                             if !profileVM.profile.profileImageURL.isEmpty {
-                                AsyncImage(url: URL(string: profileVM.profile.profileImageURL)) { image in
-                                    image
-                                        .resizable()
-                                        .scaledToFill()
-                                        .frame(width: 100, height: 100)
-                                        .clipShape(Circle())
-                                } placeholder: {
-                                    Circle()
-                                        .fill(Color.gray.opacity(0.2))
-                                        .frame(width: 100, height: 100)
-                                        .overlay(
-                                            Image(systemName: "person.fill")
-                                                .font(.system(size: 40))
-                                                .foregroundColor(.gray)
-                                        )
-                                }
+                                KFImage(URL(string: profileVM.profile.profileImageURL))
+                                    .resizable()
+                                    .scaledToFill()
+                                    .frame(width: 100, height: 100)
+                                    .clipShape(Circle())
                             } else {
                                 Circle()
                                     .fill(Color.gray.opacity(0.2))

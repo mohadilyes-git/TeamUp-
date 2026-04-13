@@ -7,6 +7,7 @@
 
 import SwiftUI
 import FirebaseAuth
+import Kingfisher
 
 struct BrowseView: View {
     
@@ -150,17 +151,14 @@ struct ProfileCardView: View {
         ZStack(alignment: .bottom) {
             // Profile image
             if !profile.profileImageURL.isEmpty {
-                AsyncImage(url: URL(string: profile.profileImageURL)) { image in
-                    image
-                        .resizable()
-                        .scaledToFill()
-                } placeholder: {
-                    Color.gray.opacity(0.2)
-                }
-                .frame(maxWidth: .infinity)
-                .frame(height: 520)
-                .clipped()
-            } else {
+                KFImage(URL(string: profile.profileImageURL))
+                    .resizable()
+                    .scaledToFill()
+                    .frame(maxWidth: .infinity)
+                    .frame(height: 520)
+                    .clipped()
+            }
+            else {
                 ZStack {
                     Color.gray.opacity(0.2)
                     Image(systemName: "person.fill")

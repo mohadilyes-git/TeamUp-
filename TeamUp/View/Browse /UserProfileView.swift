@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import Kingfisher
 
 struct UserProfileView: View {
     
@@ -23,18 +24,14 @@ struct UserProfileView: View {
                     
                     ZStack(alignment: .bottom) {
                         if !profile.profileImageURL.isEmpty {
-                            AsyncImage(url: URL(string: profile.profileImageURL)) { image in
-                                image
-                                    .resizable()
-                                    .scaledToFill()
-                                    .frame(maxWidth: .infinity)
-                                    .frame(height: 380)
-                                    .clipped()
-                            } placeholder: {
-                                Color.gray.opacity(0.2)
-                                    .frame(maxWidth: .infinity)
-                                    .frame(height: 380)
-                            }
+                            
+                            KFImage(URL(string: profile.profileImageURL))
+                                .resizable()
+                                .scaledToFill()
+                                .frame(maxWidth: .infinity)
+                                .frame(height: 380)
+                                .clipped()
+                            
                         } else {
                             ZStack {
                                 Color.gray.opacity(0.2)

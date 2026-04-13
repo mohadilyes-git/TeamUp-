@@ -10,6 +10,8 @@
 import SwiftUI
 import FirebaseAuth
 import FirebaseFirestore
+import Kingfisher
+
 
 struct MatchesView: View {
     
@@ -73,21 +75,11 @@ struct MatchRowView: View {
         HStack(spacing: 16) {
             // Profile image
             if !match.profileImageURL.isEmpty {
-                AsyncImage(url: URL(string: match.profileImageURL)) { image in
-                    image
-                        .resizable()
-                        .scaledToFill()
-                        .frame(width: 60, height: 60)
-                        .clipShape(Circle())
-                } placeholder: {
-                    Circle()
-                        .fill(Color.gray.opacity(0.2))
-                        .frame(width: 60, height: 60)
-                        .overlay(
-                            Image(systemName: "person.fill")
-                                .foregroundColor(.gray)
-                        )
-                }
+                KFImage(URL(string: match.profileImageURL))
+                    .resizable()
+                    .scaledToFill()
+                    .frame(width: 60, height: 60)
+                    .clipShape(Circle())
             } else {
                 Circle()
                     .fill(Color.gray.opacity(0.2))
