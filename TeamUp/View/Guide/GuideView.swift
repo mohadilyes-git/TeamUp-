@@ -291,8 +291,16 @@ struct GuideView: View {
                     .padding(.top, 8)
                 }
             }
-            .navigationTitle("Guide")
-            .navigationBarTitleDisplayMode(.large)
+            .navigationTitle("")
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbar {
+                ToolbarItem(placement: .navigationBarLeading) {
+                    Text("Guide")
+                        .font(.system(size: 26, weight: .bold))
+                        .foregroundColor(Color(red: 0.498, green: 0.467, blue: 0.867))
+                        .fixedSize()
+                }
+            }
         }
     }
 }
