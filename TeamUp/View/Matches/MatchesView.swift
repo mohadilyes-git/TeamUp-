@@ -58,8 +58,16 @@ struct MatchesView: View {
                     .padding(.top)
                 }
             }
-            .navigationTitle("Matches")
-            .navigationBarTitleDisplayMode(.large)
+            .navigationTitle("")
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbar {
+                ToolbarItem(placement: .navigationBarLeading) {
+                    Text("Matches")
+                        .font(.system(size: 26, weight: .bold))
+                        .foregroundColor(Color(red: 0.498, green: 0.467, blue: 0.867))
+                        .fixedSize()
+                }
+            }
             .onAppear {
                 viewModel.loadMatches()
             }
