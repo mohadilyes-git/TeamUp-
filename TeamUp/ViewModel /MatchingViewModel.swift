@@ -192,8 +192,8 @@ class MatchingViewModel: ObservableObject {
                 "compatibilityScore": self.compatibilityScore(currentUser: currentUser, otherUser: swipedUser)
             ]
             
-            db.collection("matches").document("\(currentUserUID)_\(swipedUserUID)").setData(matchData)
-            db.collection("matches").document("\(swipedUserUID)_\(currentUserUID)").setData(matchData)
+            let matchID = ([currentUserUID, swipedUserUID].sorted()).joined(separator: "_")
+            db.collection("matches").document(matchID).setData(matchData)
             
             // Send local notification
             DispatchQueue.main.async {

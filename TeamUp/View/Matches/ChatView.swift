@@ -96,7 +96,7 @@ struct ChatView: View {
                             .background(
                                 newMessage.isEmpty ?
                                 Color.gray.opacity(0.3) :
-                                Color(red: 0.498, green: 0.467, blue: 0.867)
+                                    Color(red: 0.498, green: 0.467, blue: 0.867)
                             )
                             .clipShape(Circle())
                     }
@@ -111,6 +111,7 @@ struct ChatView: View {
         .navigationBarTitleDisplayMode(.inline)
         .onAppear {
             loadMessages()
+            markMessagesAsRead()
             NotificationCenter.default.post(name: Notification.Name("hideTabBar"), object: nil)
         }
         .onDisappear {
@@ -146,7 +147,7 @@ struct ChatView: View {
                         timestamp: timestamp.dateValue()
                     )
                 }
-
+                
                 // Check for new messages from other user
                 if oldCount > 0 && newMessages.count > oldCount {
                     let newMessage = newMessages.last!
@@ -159,7 +160,7 @@ struct ChatView: View {
                         )
                     }
                 }
-
+                
                 self.messages = newMessages
             }
     }
@@ -179,7 +180,8 @@ struct ChatView: View {
             .addDocument(data: [
                 "text": messageText,
                 "senderUID": uid,
-                "timestamp": Timestamp()
+                "timestamp": Timestamp(),
+                "isRead": false
             ])
     }
     
@@ -190,8 +192,26 @@ struct ChatView: View {
         let uids = [currentUID, match.uid].sorted()
         return "\(uids[0])_\(uids[1])"
     }
+    
+    
+    // Mark all messages from other user as read
+    func markMessagesAsRead() {
+        guard let currentUID = Auth.auth().currentUser?.uid else { return }
+        let chatId = getChatId()
+        
+        db.collection("chats")
+            .document(chatId)
+            .collection("messages")
+            .whereField("senderUID", isEqualTo: match.uid)
+            .whereField("isRead", isEqualTo: false)
+            .getDocuments { snapshot, _ in
+                snapshot?.documents.forEach { doc in
+                    doc.reference.updateData(["isRead": true])
+                }
+            }
+    }
+    
 }
-
 // Individual message bubble
 struct MessageBubble: View {
     let message: Message

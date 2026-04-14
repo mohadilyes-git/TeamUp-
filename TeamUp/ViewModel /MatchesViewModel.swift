@@ -18,6 +18,7 @@ struct Match: Identifiable {
     var name: String
     var profileImageURL: String
     var compatibilityScore: Int
+    var unreadCount: Int = 0
 }
 
 class MatchesViewModel: ObservableObject {
@@ -34,7 +35,6 @@ class MatchesViewModel: ObservableObject {
         
         let db = Firestore.firestore()
         
-        // Find all match documents that contain current user's uid
         db.collection("matches")
             .whereField("users", arrayContains: uid)
             .getDocuments { snapshot, error in
@@ -46,7 +46,6 @@ class MatchesViewModel: ObservableObject {
                 
                 guard let documents = snapshot?.documents else { return }
                 
-                // For each match get the other user's profile
                 let group = DispatchGroup()
                 var loadedMatches: [Match] = []
                 
@@ -55,26 +54,43 @@ class MatchesViewModel: ObservableObject {
                     guard let users = data["users"] as? [String],
                           let score = data["compatibilityScore"] as? Int else { continue }
                     
-                    // Get the other user's uid
                     let otherUID = users.first { $0 != uid } ?? ""
                     
                     group.enter()
                     db.collection("profiles").document(otherUID).getDocument { profileSnapshot, _ in
                         if let profileData = profileSnapshot?.data(),
                            let profile = try? Firestore.Decoder().decode(UserProfile.self, from: profileData) {
-                            let match = Match(
-                                id: doc.documentID,
-                                uid: otherUID,
-                                name: profile.name,
-                                profileImageURL: profile.profileImageURL,
-                                compatibilityScore: score
-                            )
-                            loadedMatches.append(match)
+                            
+                            let chatID = ([uid, otherUID].sorted()).joined(separator: "_")
+                            db.collection("chats").document(chatID).collection("messages")
+                                .whereField("senderUID", isEqualTo: otherUID)
+                                .whereField("isRead", isEqualTo: false)
+                                .getDocuments { msgSnapshot, error in
+                                    if let error = error {
+                                        print("Unread error: \(error.localizedDescription)")
+                                    }
+                                    let unreadCount = msgSnapshot?.documents.count ?? 0
+                                    print("Unread count for \(profile.name): \(unreadCount)")
+                                    
+                                    // Use unreadCount when creating Match
+                                    let match = Match(
+                                        id: doc.documentID,
+                                        uid: otherUID,
+                                        name: profile.name,
+                                        profileImageURL: profile.profileImageURL,
+                                        compatibilityScore: score,
+                                        unreadCount: unreadCount
+                                    )
+                                    loadedMatches.append(match)
+                                    group.leave()
+                                }
+                        } else {
+                            group.leave()
                         }
-                        group.leave()
                     }
                 }
                 
+                // Outside the for loop
                 group.notify(queue: .main) {
                     self.matches = loadedMatches.sorted { $0.compatibilityScore > $1.compatibilityScore }
                 }

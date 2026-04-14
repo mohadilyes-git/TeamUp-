@@ -102,8 +102,20 @@ struct MatchRowView: View {
             
             Spacer()
             
-            Image(systemName: "chevron.right")
-                .foregroundColor(.gray.opacity(0.5))
+            if match.unreadCount > 0 {
+                // Red badge with unread count
+                ZStack {
+                    Circle()
+                        .fill(Color.red)
+                        .frame(width: 22, height: 22)
+                    Text("\(match.unreadCount)")
+                        .font(.system(size: 12, weight: .bold))
+                        .foregroundColor(.white)
+                }
+            } else {
+                Image(systemName: "chevron.right")
+                    .foregroundColor(.gray.opacity(0.5))
+            }
         }
         .padding()
     }
