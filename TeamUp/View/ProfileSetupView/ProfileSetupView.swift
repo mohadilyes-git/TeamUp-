@@ -16,6 +16,7 @@ struct ProfileSetupView: View {
     @StateObject private var viewModel = ProfileViewModel()
     @State private var currentStep = 1
     @State private var navigateToHome = false
+    @Environment(\.dismiss) var dismiss
     var isEditMode: Bool = false
     
     var body: some View {
@@ -63,16 +64,21 @@ struct ProfileSetupView: View {
         .onDisappear {
             NotificationCenter.default.post(name: Notification.Name("showTabBar"), object: nil)
         }
-        .onDisappear {
-            NotificationCenter.default.post(name: Notification.Name("showTabBar"), object: nil)
-        }
-        
         .navigationBarBackButtonHidden(!isEditMode)
         .onChange(of: viewModel.isSaved) { saved in
-            if saved && !isEditMode {
-                NotificationCenter.default.post(name: Notification.Name("profileSaved"), object: nil)
+            if saved {
+                if isEditMode {
+                    // In edit mode just go back
+                    NotificationCenter.default.post(name: Notification.Name("showTabBar"), object: nil)
+                    dismiss()
+                    
+                } else {
+                    // New profile setup - navigate to main app
+                    NotificationCenter.default.post(name: Notification.Name("profileSaved"), object: nil)
+                }
             }
-        }    }
+        }
+    }
 }
 
 // Hex colour extension
