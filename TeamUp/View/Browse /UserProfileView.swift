@@ -7,11 +7,16 @@
 
 import SwiftUI
 import Kingfisher
+import FirebaseAuth
+import FirebaseFirestore
+
 
 struct UserProfileView: View {
     
     let profile: UserProfile
     let score: Int
+    @State private var showBlockAlert = false
+    @Environment(\.dismiss) var dismiss
     
     var body: some View {
         ZStack {
@@ -161,7 +166,23 @@ struct UserProfileView: View {
             .ignoresSafeArea(edges: .top)
         }
         .navigationBarTitleDisplayMode(.inline)
-    }
+        .alert("Block User", isPresented: $showBlockAlert) {
+            Button("Cancel", role: .cancel) {}
+            Button("Block", role: .destructive) {
+                blockUser()
+                dismiss()
+            }
+        } message: {
+            Text("Are you sure you want to block \(profile.name)? They won't appear in your browse screen.")
+        }
+        .toolbar {
+            ToolbarItem(placement: .navigationBarTrailing) {
+                Button(action: { showBlockAlert = true  }) {
+                    Image(systemName: "slash.circle")
+                        .foregroundColor(.red)
+                }
+            }
+        } }
     
     func scoreColor(score: Int) -> Color {
         if score >= 70 { return Color.green.opacity(0.8) }
@@ -174,7 +195,15 @@ struct UserProfileView: View {
         formatter.dateStyle = .medium
         return "Move in: \(formatter.string(from: date))"
     }
-}
+    
+        func blockUser() {
+            guard let uid = Auth.auth().currentUser?.uid else { return }
+            Firestore.firestore().collection("blocks").document(uid).collection("blockedUsers").document(profile.uid).setData([
+                "blockedAt": Timestamp()
+            ])
+        }
+        }
+
 
 // Section header
 
