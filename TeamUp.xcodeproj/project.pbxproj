@@ -13,8 +13,19 @@
 		B1CDBFC72F8D36E100C7AB18 /* Kingfisher in Frameworks */ = {isa = PBXBuildFile; productRef = B1CDBFC62F8D36E100C7AB18 /* Kingfisher */; };
 /* End PBXBuildFile section */
 
+/* Begin PBXContainerItemProxy section */
+		B1CDC0972F95609900C7AB18 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = B110D0022F6CBF57000754E0 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = B110D0092F6CBF57000754E0;
+			remoteInfo = TeamUp;
+		};
+/* End PBXContainerItemProxy section */
+
 /* Begin PBXFileReference section */
 		B110D00A2F6CBF57000754E0 /* TeamUp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TeamUp.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		B1CDC0932F95609900C7AB18 /* TeamUpTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = TeamUpTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
@@ -36,6 +47,11 @@
 			path = TeamUp;
 			sourceTree = "<group>";
 		};
+		B1CDC0942F95609900C7AB18 /* TeamUpTests */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = TeamUpTests;
+			sourceTree = "<group>";
+		};
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -50,6 +66,13 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		B1CDC0902F95609900C7AB18 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
@@ -57,6 +80,7 @@
 			isa = PBXGroup;
 			children = (
 				B110D00C2F6CBF57000754E0 /* TeamUp */,
+				B1CDC0942F95609900C7AB18 /* TeamUpTests */,
 				B1CDB9432F7DC67E00C7AB18 /* Frameworks */,
 				B110D00B2F6CBF57000754E0 /* Products */,
 			);
@@ -66,6 +90,7 @@
 			isa = PBXGroup;
 			children = (
 				B110D00A2F6CBF57000754E0 /* TeamUp.app */,
+				B1CDC0932F95609900C7AB18 /* TeamUpTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -106,6 +131,29 @@
 			productReference = B110D00A2F6CBF57000754E0 /* TeamUp.app */;
 			productType = "com.apple.product-type.application";
 		};
+		B1CDC0922F95609900C7AB18 /* TeamUpTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = B1CDC0992F95609900C7AB18 /* Build configuration list for PBXNativeTarget "TeamUpTests" */;
+			buildPhases = (
+				B1CDC08F2F95609900C7AB18 /* Sources */,
+				B1CDC0902F95609900C7AB18 /* Frameworks */,
+				B1CDC0912F95609900C7AB18 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				B1CDC0982F95609900C7AB18 /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				B1CDC0942F95609900C7AB18 /* TeamUpTests */,
+			);
+			name = TeamUpTests;
+			packageProductDependencies = (
+			);
+			productName = TeamUpTests;
+			productReference = B1CDC0932F95609900C7AB18 /* TeamUpTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -118,6 +166,11 @@
 				TargetAttributes = {
 					B110D0092F6CBF57000754E0 = {
 						CreatedOnToolsVersion = 26.2;
+					};
+					B1CDC0922F95609900C7AB18 = {
+						CreatedOnToolsVersion = 26.2;
+						LastSwiftMigration = 2620;
+						TestTargetID = B110D0092F6CBF57000754E0;
 					};
 				};
 			};
@@ -140,12 +193,20 @@
 			projectRoot = "";
 			targets = (
 				B110D0092F6CBF57000754E0 /* TeamUp */,
+				B1CDC0922F95609900C7AB18 /* TeamUpTests */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
 		B110D0082F6CBF57000754E0 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		B1CDC0912F95609900C7AB18 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -162,7 +223,22 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		B1CDC08F2F95609900C7AB18 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		B1CDC0982F95609900C7AB18 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = B110D0092F6CBF57000754E0 /* TeamUp */;
+			targetProxy = B1CDC0972F95609900C7AB18 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
 		B110D0132F6CBF59000754E0 /* Debug */ = {
@@ -352,6 +428,53 @@
 			};
 			name = Release;
 		};
+		B1CDC09A2F95609900C7AB18 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 34L534GB34;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.ilyes.TeamUp.TeamUpTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				STRING_CATALOG_GENERATE_SYMBOLS = NO;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_OBJC_BRIDGING_HEADER = "TeamUpTests/TeamUpTests-Bridging-Header.h";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/TeamUp.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/TeamUp";
+			};
+			name = Debug;
+		};
+		B1CDC09B2F95609900C7AB18 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 34L534GB34;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.ilyes.TeamUp.TeamUpTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				STRING_CATALOG_GENERATE_SYMBOLS = NO;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_OBJC_BRIDGING_HEADER = "TeamUpTests/TeamUpTests-Bridging-Header.h";
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/TeamUp.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/TeamUp";
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -369,6 +492,15 @@
 			buildConfigurations = (
 				B110D0162F6CBF59000754E0 /* Debug */,
 				B110D0172F6CBF59000754E0 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		B1CDC0992F95609900C7AB18 /* Build configuration list for PBXNativeTarget "TeamUpTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				B1CDC09A2F95609900C7AB18 /* Debug */,
+				B1CDC09B2F95609900C7AB18 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
