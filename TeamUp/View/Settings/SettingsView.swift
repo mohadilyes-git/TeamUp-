@@ -2,15 +2,10 @@
 //  SettingsView.swift
 //  TeamUp
 //
-//  Created by Ilyes Mo on 05/04/2026.
+//  Created by Ilyes Mo on 05/03/2026.
 //
 
-//
-//  SettingsView.swift
-//  TeamUp
-//
-//  Created by Ilyes Mo on 03/04/2026.
-//
+
 
 import SwiftUI
 import FirebaseAuth

@@ -2,7 +2,7 @@
 //  UserProfile.swift
 //  TeamUp
 //
-//  Created by Ilyes Mo on 31/03/2026.
+
 //
 
 import Foundation
